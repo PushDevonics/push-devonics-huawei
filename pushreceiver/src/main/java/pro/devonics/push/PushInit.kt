@@ -3,13 +3,9 @@ package pro.devonics.push
 import android.content.Context
 import android.os.Build
 import android.telephony.TelephonyManager
-import android.util.Base64
 import android.util.Log
-import com.google.android.gms.tasks.Task
-import com.google.android.gms.tasks.Tasks
-import com.google.firebase.FirebaseApp
-import com.google.firebase.FirebaseOptions
-import com.google.firebase.messaging.FirebaseMessaging
+import com.huawei.hms.aaid.HmsInstanceId
+import com.huawei.hms.common.ApiException
 import pro.devonics.push.model.PushUser
 import pro.devonics.push.network.ApiHelper
 import java.util.*
@@ -19,21 +15,20 @@ private const val TAG = "PushInit"
 class PushInit {
 
     companion object {
-        private val FCM_DEFAULT_PROJECT_ID = "push-test-19590"
-        private val FCM_DEFAULT_APP_ID = "1:910789166102:android:6b88b8bc65db02e29b6137"
-        private val FCM_DEFAULT_API_KEY_BASE64 = "QUl6YVN5QzlwLVJ1WFhzMEdBX2l1eWNNakYwcTlFcXgxYXVHbnY0"
 
-        private var firebaseApp: FirebaseApp? = null
         private val appContext = AppContextKeeper.getContext()
-        private val pushCache = PushCache()
+
 
         fun run(appId: String, service: ApiHelper) {
-            val thread = Thread {
-                val sender = service.getSenderData(appId)
-                if (sender != null) {
-                    initFirebaseApp(sender)
+            val pushCache = PushCache()
+            object : Thread() {
+                override fun run() {
                     try {
-                        val registrationId = getToken()
+                        Log.d(TAG, "run() appId: $appId")
+                        //val registrationId = HmsInstanceId.getInstance(appContext).getToken(appId)
+                        val registrationId = HmsInstanceId.getInstance(appContext)
+                            .getToken(appId, "HCM")
+                        Log.d(TAG, "run() registrationId: $registrationId")
                         val regId = pushCache.getRegistrationIdFromPref()
                         val internalId = pushCache.getInternalIdFromPref()
                         if (registrationId != null) {
@@ -47,45 +42,14 @@ class PushInit {
                                 val subscribe = pushUser?.let { service.createPush(it) }
                             }
                         }
-                        Log.d(TAG, "Device registered, push token = $registrationId")
-                    } catch (e: NoClassDefFoundError) {
-                        Log.e(
-                            "Info",
-                            "FirebaseMessaging.getToken not found, attempting to use FirebaseInstanceId.getToken"
-                        )
-                    } catch (e: NoSuchMethodError) {
-                        Log.e(
-                            "Info",
-                            "FirebaseMessaging.getToken not found, attempting to use FirebaseInstanceId.getToken"
-                        )
+
+                        //pc.saveRegistrationIdPref(token)
+                        Log.d(TAG, "getToken() token: $registrationId")
+                    } catch (e: ApiException) {
+                        Log.e("PUSH", "getToken() failure: ${e.message}")
                     }
                 }
-            }
-            thread.start()
-        }
-
-        private fun initFirebaseApp(senderId: String) {
-            if (firebaseApp != null) {
-                return
-            }
-
-            val firebaseOptions = FirebaseOptions.Builder()
-                .setGcmSenderId(senderId)
-                .setApplicationId(FCM_DEFAULT_APP_ID)
-                .setApiKey(String(Base64.decode(FCM_DEFAULT_API_KEY_BASE64, Base64.DEFAULT)))
-                .setProjectId(FCM_DEFAULT_PROJECT_ID)
-                .build()
-            firebaseApp = appContext.let {
-                FirebaseApp.initializeApp(
-                    it, firebaseOptions
-                )
-            }
-        }
-
-        private fun getToken(): String {
-            val fcmInstance = firebaseApp?.get(FirebaseMessaging::class.java)
-            val tokenTask = fcmInstance?.token as Task<String>
-            return Tasks.await(tokenTask)
+            }.start()
         }
 
         private fun setPushUser(
@@ -121,7 +85,7 @@ class PushInit {
                 registrationId,
                 internalId,
                 appId,
-                1,
+                4,
                 country,
                 lang,
                 timezone,
