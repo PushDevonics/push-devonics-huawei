@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest package="pro.devonics.push"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="com.huawei.appmarket.service.commondata.permission.GET_COMMON_DATA" />
+
+    <application>
+        <receiver
+            android:name="pro.devonics.push.NotificationBroadcastReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="pro.devonics.action.PUSH"/>
+            </intent-filter>
+
+        </receiver>
+
+        <service
+            android:name="pro.devonics.push.MyHmsMessageService"
+            android:enabled="true"
+            android:exported="false"
+            android:permission="${applicationId}.permission.PROCESS_PUSH_MSG"
+            android:process=":HmsMessageService">
+            <intent-filter>
+                <action android:name="com.huawei.push.action.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+    </application>
+</manifest>
+
