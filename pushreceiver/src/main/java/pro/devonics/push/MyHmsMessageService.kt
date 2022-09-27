@@ -28,18 +28,17 @@ import java.util.*
 private const val TAG = "MyHmsMessageService"
 
 class MyHmsMessageService : HmsMessageService() {
-    private var b: Bitmap? = null
 
     @RequiresApi(33)
     @SuppressLint("DiscouragedApi", "UnspecifiedImmutableFlag")
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
-        //super.onMessageReceived(remoteMessage)
+        super.onMessageReceived(remoteMessage)
 
-        //val helperCache = HelperCache(this)
+        val helperCache = HelperCache(this)
         val msgData = remoteMessage.dataOfMap
         val msgBody = msgData["message_body"].toString()
         Log.d(TAG, "onMessageReceived msgBody: $msgBody")
-        /*if (msgData != null) {
+        if (msgData != null) {
             val sentPushId = msgData["sent_push_id"].toString()
             val deeplink = msgData["deeplink"].toString()
             if (remoteMessage.notification.link != null) {
@@ -48,30 +47,27 @@ class MyHmsMessageService : HmsMessageService() {
                 Log.d(TAG, "onMessageReceived openUrl: $openUrl")
             }
 
-            //val openUrl = msgData["open_url"].toString()
-
             helperCache.saveSentPushId(sentPushId)
             helperCache.saveDeeplink(deeplink)
 
             Log.d(TAG, "onMessageReceived sentPushId: $sentPushId")
             Log.d(TAG, "onMessageReceived deeplink: $deeplink")
 
-        }*/
+        }
 
         val packageName = applicationContext.packageName
         val mLauncher = "ic_launcher"
         val resId = resources.getIdentifier(mLauncher, "mipmap", packageName)
 
         val intent = packageManager.getLaunchIntentForPackage(packageName)
-        //val intent = packageManager.getLaunchIntentForPackage(packageName)
-        //intent?.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
         intent?.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
 
         // Send pushData to intent
-        //intent?.putExtra("sent_push_id", msgData["sent_push_id"]).toString()
-        //intent?.putExtra("deeplink", msgData["deeplink"]).toString()
+        intent?.putExtra("sent_push_id", msgData["sent_push_id"]).toString()
+        intent?.putExtra("deeplink", msgData["deeplink"]).toString()
         //intent?.putExtra("open_url", msgData["open_url"]).toString()
         val u = remoteMessage.notification.link
+        intent?.putExtra("open_url", u).toString()
 
         //val largeIcon = remoteMessage.notification?.imageUrl.let { getBitmapFromUrl(it.toString()) }
         //val smallIcon = remoteMessage.notification?.icon.let { getBitmapFromUrl(it.toString()) }
@@ -100,8 +96,8 @@ class MyHmsMessageService : HmsMessageService() {
         //super.onMessageReceived(msg)
         val notification = remoteMessage.notification
 
-        //val notificationData = remoteMessage.dataOfMap
-        if (notification != null) {
+        val notificationData = remoteMessage.dataOfMap
+        if (notificationData != null) {
 
             val title = notification.title
             val text = notification.body
