@@ -177,16 +177,16 @@ class MyHmsMessageService : HmsMessageService() {
             //val iconUrl = remoteMessage.notification?.icon.toString()
             val imageUrl = remoteMessage.notification?.imageUrl.toString()
 
-            val notificationBuilder = NotificationCompat.Builder(applicationContext, channelId)
+            val notificationBuilder = NotificationCompat.Builder(this, channelId)
                 .setSmallIcon(resId)
                 .setContentTitle(title)
                 .setContentText(text)
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true)
 
-            val notificationManager = NotificationManagerCompat.from(applicationContext)
+            val notificationManager = NotificationManagerCompat.from(this)
             if (remoteMessage.notification?.imageUrl != null) {
-                Glide.with(applicationContext)
+                Glide.with(this)
                     .asBitmap()
                     .load(imageUrl)
                     .into(object : CustomTarget<Bitmap>() {
