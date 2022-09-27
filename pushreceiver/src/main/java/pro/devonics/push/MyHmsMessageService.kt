@@ -175,7 +175,7 @@ class MyHmsMessageService : HmsMessageService() {
             Log.d(TAG, "onMessageReceived: title $title")
 
             //val iconUrl = remoteMessage.notification?.icon.toString()
-            val imageUrl = remoteMessage.notification?.imageUrl.toString()
+            //val imageUrl = remoteMessage.notification?.imageUrl.toString()
 
             val notificationBuilder = NotificationCompat.Builder(this, channelId)
                 .setSmallIcon(resId)
@@ -188,7 +188,7 @@ class MyHmsMessageService : HmsMessageService() {
             if (remoteMessage.notification?.imageUrl != null) {
                 Glide.with(this)
                     .asBitmap()
-                    .load(imageUrl)
+                    .load(remoteMessage.notification?.imageUrl)
                     .into(object : CustomTarget<Bitmap>() {
                         override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
                             notificationBuilder.setLargeIcon(resource)
