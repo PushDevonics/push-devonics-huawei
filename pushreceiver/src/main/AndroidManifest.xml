@@ -20,9 +20,7 @@
         <service
             android:name="pro.devonics.push.MyHmsMessageService"
             android:enabled="true"
-            android:exported="false"
-            android:permission="${applicationId}.permission.PROCESS_PUSH_MSG"
-            android:process=":HmsMessageService">
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.huawei.push.action.MESSAGING_EVENT" />
             </intent-filter>

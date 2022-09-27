@@ -102,8 +102,6 @@ class MyHmsMessageService : HmsMessageService() {
             PendingIntent.getActivity(
                 this, rnds, intent, PendingIntent.FLAG_IMMUTABLE)
         } else {
-            /*PendingIntent.getBroadcast(
-                this, rnds, intent!!, PendingIntent.FLAG_ONE_SHOT)*/
             PendingIntent.getActivity(
                 this, rnds, intent, PendingIntent.FLAG_ONE_SHOT)
         }
@@ -179,14 +177,14 @@ class MyHmsMessageService : HmsMessageService() {
             //val iconUrl = remoteMessage.notification?.icon.toString()
             val imageUrl = remoteMessage.notification?.imageUrl.toString()
 
-            val notificationBuilder = NotificationCompat.Builder(this, channelId)
+            val notificationBuilder = NotificationCompat.Builder(applicationContext, channelId)
                 .setSmallIcon(resId)
                 .setContentTitle(title)
                 .setContentText(text)
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true)
 
-            val notificationManager = NotificationManagerCompat.from(this)
+            val notificationManager = NotificationManagerCompat.from(applicationContext)
             if (remoteMessage.notification?.imageUrl != null) {
                 Glide.with(applicationContext)
                     .asBitmap()
