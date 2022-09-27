@@ -100,19 +100,14 @@ class MyHmsMessageService : HmsMessageService() {
         //super.onMessageReceived(msg)
         val notification = remoteMessage.notification
 
-        val notificationData = remoteMessage.dataOfMap
-        if (notificationData != null) {
-            Log.d(TAG, "onMessageReceived: notificationData $notificationData")
-            if (notificationData.isEmpty()) {
-                Log.d(TAG, "onMessageReceived: notification data is empty")
-                return
-            }
+        //val notificationData = remoteMessage.dataOfMap
+        if (notification != null) {
 
             val title = notification.title
             val text = notification.body
             Log.d(TAG, "onMessageReceived: title $title")
 
-            val imageUrl = remoteMessage.notification?.icon.toString()
+            val imageUrl = remoteMessage.notification?.imageUrl.toString()
 
             val notificationBuilder = NotificationCompat.Builder(this, channelId)
                 .setSmallIcon(resId)
