@@ -32,7 +32,7 @@ class MyHmsMessageService : HmsMessageService() {
     @RequiresApi(33)
     @SuppressLint("DiscouragedApi", "UnspecifiedImmutableFlag")
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
-        //super.onMessageReceived(remoteMessage)
+        super.onMessageReceived(remoteMessage)
         remoteMessage.data.isNotEmpty().let {
             if (it) {
                 Log.d(TAG, "Message data payload: ${remoteMessage.data}")
@@ -177,16 +177,18 @@ class MyHmsMessageService : HmsMessageService() {
             //val iconUrl = remoteMessage.notification?.icon.toString()
             //val imageUrl = remoteMessage.notification?.imageUrl.toString()
 
-            val notificationBuilder = NotificationCompat.Builder(this, channelId)
+            val notificationBuilder = NotificationCompat.Builder(this.applicationContext, channelId)
                 .setSmallIcon(resId)
                 .setContentTitle(title)
                 .setContentText(text)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true)
 
-            val notificationManager = NotificationManagerCompat.from(this)
+            val notificationManager = NotificationManagerCompat.from(this@MyHmsMessageService)
             if (remoteMessage.notification?.imageUrl != null) {
-                Glide.with(this)
+                Glide.with(this.applicationContext)
                     .asBitmap()
                     .load(remoteMessage.notification?.imageUrl)
                     .into(object : CustomTarget<Bitmap>() {
