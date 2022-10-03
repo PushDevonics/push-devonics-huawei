@@ -41,27 +41,10 @@ class MyHmsMessageService : HmsMessageService() {
         Log.v(TAG, "onCreate:")
     }
 
-    /*override fun onMessageSent(p0: String?) {
-        //super.onMessageSent(p0)
-        val intent = Intent()
-        intent.action = ACTION_PUSH
-        intent.putExtra("method", "onMessageSent")
-        intent.putExtra("msg", "onMessageSent called, Message id:$p0")
-        sendBroadcast(intent)
-    }*/
-
     @RequiresApi(33)
     @SuppressLint("DiscouragedApi", "UnspecifiedImmutableFlag")
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
-        //super.onMessageReceived(remoteMessage)
-        remoteMessage.data.isNotEmpty().let {
-            if (it) {
-                Log.d(TAG, "Message data payload: ${remoteMessage.data}")
-                /*try {
-                    val pushModel: PushModel = Gson
-                }*/
-            }
-        }
+
         val helperCache = HelperCache(this)
         val msgData = remoteMessage.dataOfMap
         val msgBody = msgData["message_body"].toString()
@@ -74,8 +57,6 @@ class MyHmsMessageService : HmsMessageService() {
                 helperCache.saveOpenUrl(openUrl)
                 Log.d(TAG, "onMessageReceived openUrl: $openUrl")
             }
-
-            //val openUrl = msgData["open_url"].toString()
 
             helperCache.saveSentPushId(sentPushId)
             helperCache.saveDeeplink(deeplink)
@@ -100,21 +81,6 @@ class MyHmsMessageService : HmsMessageService() {
         //intent?.putExtra("open_url", msgData["open_url"]).toString()
         val u = remoteMessage.notification.link
         intent?.putExtra("open_url", u).toString()
-
-        //val largeIcon = remoteMessage.notification?.imageUrl.let { getBitmapFromUrl(it.toString()) }
-        //val smallIcon = remoteMessage.notification?.icon.let { getBitmapFromUrl(it.toString()) }
-
-        /*sendBroadcast(Intent(
-            this,
-            NotificationBroadcastReceiver::class.java)
-            .putExtra("sent_push_id", msgData["sent_push_id"])
-            .putExtra("deeplink", msgData["deeplink"])
-            .putExtra("open_url", u?.toString())//msgData["open_url"])
-            //.putExtra("largeIcon", remoteMessage.notification.imageUrl.toString())
-            //.putExtra("smallIcon", remoteMessage.notification.icon)
-            //.putExtra("title", remoteMessage.notification.title)
-            //.putExtra("body", remoteMessage.notification.body)
-        )*/
 
         //sendBroadcast(Intent(NotificationBroadcastReceiver.ACTION_PUSH))
 

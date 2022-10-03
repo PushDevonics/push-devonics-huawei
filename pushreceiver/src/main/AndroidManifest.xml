@@ -13,15 +13,6 @@
     </queries>
 
     <application>
-        <!--<receiver
-            android:name="pro.devonics.push.NotificationBroadcastReceiver"
-            android:enabled="true"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="pro.devonics.action.PUSH"/>
-            </intent-filter>
-
-        </receiver>-->
 
         <service
             android:name="pro.devonics.push.MyHmsMessageService"

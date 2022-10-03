@@ -45,7 +45,7 @@ class PushDevonics(activity: Activity, appId: String) : LifecycleEventObserver {
             Lifecycle.Event.ON_START -> Log.d(TAG, "ON_START: ")
             Lifecycle.Event.ON_RESUME -> {
                 Log.d(TAG, "ON_RESUME: ")
-                sendTransition()
+                //sendTransition()
                 openUrl(myContext)
             }
             //Lifecycle.Event.ON_RESUME -> Log.d(TAG, "onResume: ")
@@ -85,13 +85,10 @@ class PushDevonics(activity: Activity, appId: String) : LifecycleEventObserver {
     }
 
     fun getIntentData(intent: Intent?) {
-        //val service = ApiHelper(RetrofitBuilder.apiService)
+
         if (null != intent) {
             val bundle = intent.extras
-            /*bundle?.keySet()?.forEach { key ->
-                val content = bundle.getString(key)
-                Log.v(TAG, "receive data from push, key = $key, content = $content")
-            }*/
+
             val sentPushId = bundle?.getString("sent_push_id")
             if (sentPushId != null) {
                 val pushData = PushData(sentPushId)
@@ -100,32 +97,13 @@ class PushDevonics(activity: Activity, appId: String) : LifecycleEventObserver {
                 if (registrationId != null) {
                     service.createTransition(registrationId, pushData)
                 }
-                //sendTransition()
+                sendTransition()
                 Log.d(TAG, "getIntentData: sentPushId $sentPushId")
             }
-            /*val openUrl = bundle?.getString("open_url")
-            if (openUrl != null && sentPushId != null) {
-                openUrl(myContext)
-                sendTransition(sentPushId)
-            }*/
         } else {
             Log.i(TAG, "intent = null")
         }
     }
-
-    /*private fun sendTransition() {
-        val sentPushId = helperCache.getSentPushId()
-        val pushCache = PushCache()
-        val registrationId = pushCache.getRegistrationIdFromPref()
-        val pushData = sentPushId?.let { PushData(it) }
-        if (registrationId != null) {
-            if (pushData != null) {
-                service.createTransition(registrationId, pushData)
-            }
-        }
-        Log.d(TAG, "sendTransition: pushData = $pushData")
-        helperCache.saveSentPushId(null)
-    }*/
 
     private fun sendTransition() {
         val sentPushId = helperCache.getSentPushId()

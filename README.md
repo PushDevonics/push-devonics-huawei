@@ -1,85 +1,85 @@
 [![Release](https://jitpack.io/v/PushDevonics/push-devonics-huawei.svg)](https://jitpack.io/#PushDevonics/push-devonics-huawei)
 
-[comment]: <> (Add it to you settings.gradle in repositories:)
+Add it to you settings.gradle in repositories:
 
-[comment]: <> (    repositories {)
+    repositories {
 
-[comment]: <> (            google&#40;&#41;)
+            google()
 
-[comment]: <> (            mavenCentral&#40;&#41;)
+            mavenCentral()
 
-[comment]: <> (            maven { url 'https://jitpack.io' })
+            maven { url 'https://jitpack.io' }
 
-[comment]: <> (    })
+    }
 
-[comment]: <> (and:)
+and:
 
-[comment]: <> (    dependencies {)
+    dependencies {
 
-[comment]: <> (        implementation platform&#40;'com.google.firebase:firebase-bom:28.3.1'&#41;)
+        implementation platform('com.google.firebase:firebase-bom:28.3.1')
 
-[comment]: <> (        implementation 'com.google.firebase:firebase-messaging-ktx')
+        implementation 'com.google.firebase:firebase-messaging-ktx'
 
-[comment]: <> (        implementation 'com.github.PushDevonics:push-devonics-android:latest version')
+        implementation 'com.github.PushDevonics:push-devonics-android:latest version'
 
-[comment]: <> (    })
+    }
 
-[comment]: <> (If you want single Activity:)
+If you want single Activity:
     
-[comment]: <> (Kotlin:)
+Kotlin:
 
-[comment]: <> (MainActivity:)
+MainActivity:
 
-[comment]: <> (    private lateinit var pushDevonics: PushDevonics)
+    private lateinit var pushDevonics: PushDevonics
     
-[comment]: <> (MainActivity in onCreate&#40;&#41;:)
+MainActivity in onCreate():
 
-[comment]: <> (    pushDevonics = PushDevonics&#40;this, "appId"&#41;)
+    pushDevonics = PushDevonics(this, "appId")
 
-[comment]: <> (    lifecycle.addObserver&#40;pushDevonics&#41;)
+    lifecycle.addObserver(pushDevonics)
     
-[comment]: <> (    // If you need internalId)
+    // If you need internalId
 
-[comment]: <> (    val internalId = pushDevonics.getInternalId&#40;&#41;)
+    val internalId = pushDevonics.getInternalId()
     
-[comment]: <> (    // If you want add tag type String)
+    // If you want add tag type String
 
-[comment]: <> (    pushDevonics.setTags&#40;"key", "value"&#41;)
+    pushDevonics.setTags("key", "value")
     
-[comment]: <> (    // If you need deeplink)
+    // If you need deeplink
 
-[comment]: <> (    val deepLink = pushDevonics.getDeeplink&#40;&#41;)
+    val deepLink = pushDevonics.getDeeplink()
     
-[comment]: <> (Java:)
+Java:
 
-[comment]: <> (MainActivity:)
+MainActivity:
 
-[comment]: <> (    private PushDevonics pushDevonics;)
+    private PushDevonics pushDevonics;
     
-[comment]: <> (MainActivity in onCreate&#40;&#41;:)
+MainActivity in onCreate():
 
-[comment]: <> (    pushDevonics = new PushDevonics&#40;this, "appId"&#41;;)
+    pushDevonics = new PushDevonics(this, "appId");
 
-[comment]: <> (    getLifecycle&#40;&#41;.addObserver&#40;pushDevonics&#41;;)
+    getLifecycle().addObserver(pushDevonics);
         
-[comment]: <> (    // If you need internalId)
+    // If you need internalId
 
-[comment]: <> (    String internalId = pushDevonics.getInternalId&#40;&#41;;)
+    String internalId = pushDevonics.getInternalId();
     
-[comment]: <> (    // If you want add tag type String)
+    // If you want add tag type String
 
-[comment]: <> (    pushDevonics.setTags&#40;"key", "value"&#41;;)
+    pushDevonics.setTags("key", "value");
     
-[comment]: <> (    // If you need deeplink)
+    // If you need deeplink
 
-[comment]: <> (    String deeplink = pushDevonics.getDeeplink&#40;&#41;;)
+    String deeplink = pushDevonics.getDeeplink();
         
-[comment]: <> (If you want many Activities:)
+If you want many Activities:
 
-[comment]: <> (You need to create a class inherited from Application and initiate it like for an Activity)
+You need to create a class inherited from Application and initiate it like for an Activity
 
-[comment]: <> (in onCreate&#40;&#41;:)
+in onCreate():
 
-[comment]: <> (    pushDevonics = new PushDevonics&#40;this, "appId"&#41;;)
+    pushDevonics = new PushDevonics(this, "appId");
 
-[comment]: <> (    registerActivityLifecycleCallbacks&#40;pushDevonics&#41;;)
+    registerActivityLifecycleCallbacks(pushDevonics);
