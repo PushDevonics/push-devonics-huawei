@@ -94,9 +94,9 @@ class PushDevonics(activity: Activity, appId: String) : LifecycleEventObserver {
                 val pushData = PushData(sentPushId)
                 val pushCache = PushCache()
                 val registrationId = pushCache.getRegistrationIdFromPref()
-                if (registrationId != null) {
+                /*if (registrationId != null) {
                     service.createTransition(registrationId, pushData)
-                }
+                }*/
                 sendTransition()
                 Log.d(TAG, "getIntentData: sentPushId $sentPushId")
             }
@@ -133,9 +133,6 @@ class PushDevonics(activity: Activity, appId: String) : LifecycleEventObserver {
             try {
                 context.startActivity(urlIntent)
                 sendTransition()
-                /*if (sentPushId != null) {
-                    sendTransition()
-                }*/
             } catch (e: ActivityNotFoundException) {
                 Log.e(TAG, "ActivityNotFoundException $e")
             }
