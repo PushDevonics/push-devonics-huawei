@@ -104,7 +104,7 @@ class MyHmsMessageService : HmsMessageService() {
         //val largeIcon = remoteMessage.notification?.imageUrl.let { getBitmapFromUrl(it.toString()) }
         //val smallIcon = remoteMessage.notification?.icon.let { getBitmapFromUrl(it.toString()) }
 
-        sendBroadcast(Intent(
+        /*sendBroadcast(Intent(
             this,
             NotificationBroadcastReceiver::class.java)
             .putExtra("sent_push_id", msgData["sent_push_id"])
@@ -114,7 +114,8 @@ class MyHmsMessageService : HmsMessageService() {
             //.putExtra("smallIcon", remoteMessage.notification.icon)
             //.putExtra("title", remoteMessage.notification.title)
             //.putExtra("body", remoteMessage.notification.body)
-        )
+        )*/
+
         //sendBroadcast(Intent(NotificationBroadcastReceiver.ACTION_PUSH))
 
         val rnds = (1..1000).random()
@@ -123,67 +124,14 @@ class MyHmsMessageService : HmsMessageService() {
             PendingIntent.getActivity(
                 this, rnds, intent, PendingIntent.FLAG_IMMUTABLE)
         } else {
-            /*PendingIntent.getBroadcast(
-                this, rnds, intent!!, PendingIntent.FLAG_ONE_SHOT)*/
             PendingIntent.getActivity(
                 this, rnds, intent, PendingIntent.FLAG_ONE_SHOT)
         }
 
         val channelId = "Default"
 
-        remoteMessage?.let {
-            val map = it.dataOfMap
-            for (key in map.keys) {
-                //Log.d(TAG, "onMessageReceived: map k $key")
-                Log.d(TAG, "onMessageReceived: map ${map[key]}")
-                //Log.d(TAG, "onMessageReceived: map ${msg.dataOfMap["title"]}")
-            }
-            //Log.d(TAG, "onMessageReceived: map ${map["message"]}")
-        }
-        if (remoteMessage != null) {
-            Log.v(TAG, "onMessageReceived: ${remoteMessage.dataOfMap.keys}")
-        }
-        //if (msg?.dataOfMap?.containsKey(""))
-        if (remoteMessage!!.data.isNotEmpty()) {
-            Log.i(TAG, "Message data payload: " + remoteMessage.data.toString())
-        }
-        if (remoteMessage.notification != null) {
-            Log.i(TAG, "Message Notification Body: " + remoteMessage.notification.body)
-        }
-
-        //super.onMessageReceived(msg)
-        Log.d(TAG, "getCollapseKey: " + remoteMessage?.collapseKey
-                + "\n getData: " + remoteMessage?.data
-                + "\n getFrom: " + remoteMessage?.from
-                + "\n getTo: " + remoteMessage?.to
-                + "\n getMessageId: " + remoteMessage?.messageId
-                + "\n getSendTime: " + remoteMessage?.sentTime
-                + "\n getMessageType: " + remoteMessage?.messageType
-                + "\n getTtl: " + remoteMessage?.ttl
-        )
-
         val notification = remoteMessage.notification
         Log.d(TAG, "onMessageReceived: notification $notification")
-        val dataMsg = remoteMessage?.data
-        Log.d(TAG, "onMessageReceived: dataMsg $dataMsg")
-        if (notification != null) {
-            Log.d(TAG, "\n getImageUrl: " + notification.imageUrl
-                    + "\n getTitle: " + notification.title
-                    + "\n getTitleLocalizationKey: " + notification.titleLocalizationKey
-                    + "\n getTitleLocalizationArgs: " + Arrays.toString(notification.titleLocalizationArgs)
-                    + "\n getBody: " + notification.body
-                    + "\n getBodyLocalizationKey: " + notification.bodyLocalizationKey
-                    + "\n getBodyLocalizationArgs: " + Arrays.toString(notification.bodyLocalizationArgs)
-                    + "\n getIcon: " + notification.icon
-                    + "\n getSound: " + notification.sound
-                    + "\n getTag: " + notification.tag
-                    + "\n getColor: " + notification.color
-                    + "\n getClickAction: " + notification.clickAction
-                    + "\n getChannelId: " + notification.channelId
-                    + "\n getLink: " + notification.link
-                    + "\n getNotifyId: " + notification.notifyId
-            )
-        }
 
         val notificationData = remoteMessage.dataOfMap
         if (notificationData != null) {
@@ -192,12 +140,9 @@ class MyHmsMessageService : HmsMessageService() {
                 Log.d(TAG, "onMessageReceived: notification data is empty")
                 return
             }
-
-            //val title = notificationData["title"]
             val title = notification.title
-            //val text = notificationData["text"]
             val text = notification.body
-            Log.d(TAG, "onMessageReceived: title $title")
+            //Log.d(TAG, "onMessageReceived: title $title")
 
             val imageUrl = remoteMessage.notification?.imageUrl.toString()
 
