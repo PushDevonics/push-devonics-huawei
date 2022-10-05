@@ -97,9 +97,9 @@ class PushDevonics(activity: Activity, appId: String) : LifecycleEventObserver {
         sent_push_id = bundle?.getString("sent_push_id")
         sentPushId = helperCache.getSentPushId()
         val transitionState = helperCache.getTransitionSt()
-        Log.d(TAG, "parse: sent_push_id $sent_push_id")
-        Log.d(TAG, "parse: sentPushId $sentPushId")
-        Log.d(TAG, "parse: openUrl $openUrl")
+        //Log.d(TAG, "parse: sent_push_id $sent_push_id")
+        //Log.d(TAG, "parse: sentPushId $sentPushId")
+
         if (transitionState == true) {
             return
         }
@@ -114,23 +114,9 @@ class PushDevonics(activity: Activity, appId: String) : LifecycleEventObserver {
         helperCache.saveSentPushId(null)
     }
 
-    private fun sendTransition() {
-        val sentPushId = helperCache.getSentPushId()
-        val pushCache = PushCache()
-        val registrationId = pushCache.getRegistrationIdFromPref()
-        if (sentPushId != null) {
-            val pushData = PushData(sentPushId)
-            if (registrationId != null) {
-                service.createTransition(registrationId, pushData)
-            }
-            Log.d(TAG, "sendTransition: pushData = $pushData")
-        }
-        helperCache.saveSentPushId(null)
-    }
-
     private fun openUrl(context: Context) {
         val openUrl = helperCache.getOpenUrl()
-        Log.d(TAG, "openUrl = $openUrl")
+        //Log.d(TAG, "openUrl = $openUrl")
         if (openUrl != null) {
             val urlIntent = Intent()
                 .setAction(Intent.ACTION_VIEW)
@@ -145,7 +131,7 @@ class PushDevonics(activity: Activity, appId: String) : LifecycleEventObserver {
             }
         }
         helperCache.saveOpenUrl(null)
-        Log.d(TAG, "openUrl = $openUrl")
+        //Log.d(TAG, "openUrl = $openUrl")
     }
 
     fun getDeeplink(): String {
@@ -154,19 +140,14 @@ class PushDevonics(activity: Activity, appId: String) : LifecycleEventObserver {
         return deep1.toString()
     }
 
-    fun createInternalId() {
+    private fun createInternalId() {
         val pushCache = PushCache()
-
         var internalId = pushCache.getInternalIdFromPref()
-        //var internalId = getInternalId()
         if (internalId == null) {
             internalId = UUID.randomUUID().toString()
-            //val uuid = UUID.randomUUID()
-            //internalId = uuid.toString()
             pushCache.saveInternalId(internalId)
-
         }
-        Log.d(TAG, "createInternalId: internalId $internalId")
+        //Log.d(TAG, "createInternalId: internalId $internalId")
     }
 
     fun getInternalId(): String? {

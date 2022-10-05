@@ -45,14 +45,14 @@ class MyHmsMessageService : HmsMessageService() {
             if (remoteMessage.notification.link != null) {
                 val openUrl = remoteMessage.notification.link.toString()
                 helperCache.saveOpenUrl(openUrl)
-                Log.d(TAG, "onMessageReceived openUrl: $openUrl")
+                //Log.d(TAG, "onMessageReceived openUrl: $openUrl")
             }
 
             helperCache.saveSentPushId(sentPushId)
             helperCache.saveDeeplink(deeplink)
             helperCache.saveTransition(false)
-            Log.d(TAG, "onMessageReceived sentPushId: $sentPushId")
-            Log.d(TAG, "onMessageReceived deeplink: $deeplink")
+            //Log.d(TAG, "onMessageReceived sentPushId: $sentPushId")
+            //Log.d(TAG, "onMessageReceived deeplink: $deeplink")
 
         }
 
@@ -82,11 +82,11 @@ class MyHmsMessageService : HmsMessageService() {
         val channelId = "Default"
 
         val notification = remoteMessage.notification
-        Log.d(TAG, "onMessageReceived: notification $notification")
+        //Log.d(TAG, "onMessageReceived: notification $notification")
 
         val notificationData = remoteMessage.dataOfMap
         if (notificationData != null) {
-            Log.d(TAG, "onMessageReceived: notificationData $notificationData")
+            //Log.d(TAG, "onMessageReceived: notificationData $notificationData")
             if (notificationData.isEmpty()) {
                 Log.d(TAG, "onMessageReceived: notification data is empty")
                 return
@@ -113,7 +113,7 @@ class MyHmsMessageService : HmsMessageService() {
                 notificationManager.createNotificationChannel(channel)
             }
             if (remoteMessage.notification?.imageUrl != null) {
-                Log.d(TAG, "onMessageReceived: imageUrl $imageUrl")
+                //Log.d(TAG, "onMessageReceived: imageUrl $imageUrl")
                 Glide.with(this.applicationContext)
                     .asBitmap()
                     .load(remoteMessage.notification?.imageUrl)
