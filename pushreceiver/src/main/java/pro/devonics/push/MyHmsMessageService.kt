@@ -31,16 +31,6 @@ private const val TAG = "MyHmsMessageService"
 
 class MyHmsMessageService : HmsMessageService() {
 
-    override fun onDestroy() {
-        Log.v(TAG, "onDestroy:")
-        super.onDestroy()
-    }
-
-    override fun onCreate() {
-        super.onCreate()
-        Log.v(TAG, "onCreate:")
-    }
-
     @RequiresApi(33)
     @SuppressLint("DiscouragedApi", "UnspecifiedImmutableFlag")
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
@@ -60,7 +50,7 @@ class MyHmsMessageService : HmsMessageService() {
 
             helperCache.saveSentPushId(sentPushId)
             helperCache.saveDeeplink(deeplink)
-
+            helperCache.saveTransition(false)
             Log.d(TAG, "onMessageReceived sentPushId: $sentPushId")
             Log.d(TAG, "onMessageReceived deeplink: $deeplink")
 
@@ -71,18 +61,13 @@ class MyHmsMessageService : HmsMessageService() {
         val resId = resources.getIdentifier(mLauncher, "mipmap", packageName)
 
         val intent = packageManager.getLaunchIntentForPackage(packageName)
-        //val intent = packageManager.getLaunchIntentForPackage(packageName)
-        //intent?.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
         intent?.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
 
         // Send pushData to intent
         intent?.putExtra("sent_push_id", msgData["sent_push_id"]).toString()
         intent?.putExtra("deeplink", msgData["deeplink"]).toString()
-        //intent?.putExtra("open_url", msgData["open_url"]).toString()
         val u = remoteMessage.notification.link
         intent?.putExtra("open_url", u).toString()
-
-        //sendBroadcast(Intent(NotificationBroadcastReceiver.ACTION_PUSH))
 
         val rnds = (1..1000).random()
 

@@ -96,7 +96,6 @@ MainActivity in onCreate():
 
     pushDevonics = PushDevonics(this, "appId")
     lifecycle.addObserver(pushDevonics)
-    pushDevonics.getIntent(intent)
     
     // If you need internalId
     val internalId = pushDevonics.getInternalId()
@@ -117,7 +116,6 @@ MainActivity in onCreate():
 
     pushDevonics = new PushDevonics(this, "appId");
     getLifecycle().addObserver(pushDevonics);
-    pushDevonics.getIntent(getIntent());
         
     // If you need internalId
     String internalId = pushDevonics.getInternalId();

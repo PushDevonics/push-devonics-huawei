@@ -29,6 +29,9 @@ class PushDevonics(activity: Activity, appId: String) : LifecycleEventObserver {
     private val service = ApiHelper(RetrofitBuilder.apiService)
     private val helperCache = HelperCache(activity)
     private val myContext = activity
+    private var sentPushId: String? = null
+    private var sent_push_id: String? = null
+    private var openUrl: String? = null
 
     init {
         AppContextKeeper.setContext(activity)
@@ -36,23 +39,26 @@ class PushDevonics(activity: Activity, appId: String) : LifecycleEventObserver {
         DataHelper.startTime()
         startSession()
         createInternalId()
-
     }
     override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
         //Log.d(TAG, "onStateChanged: source = $source")
         when (event) {
-            Lifecycle.Event.ON_CREATE -> askNotificationPermission()//Log.d(TAG, "ON_CREATE: ")
+            Lifecycle.Event.ON_CREATE -> {
+                Log.d(TAG, "ON_CREATE: ")
+                askNotificationPermission()
+                parseIntent(myContext)
+            }
             Lifecycle.Event.ON_START -> Log.d(TAG, "ON_START: ")
             Lifecycle.Event.ON_RESUME -> {
                 Log.d(TAG, "ON_RESUME: ")
-                //sendTransition()
                 openUrl(myContext)
             }
-            //Lifecycle.Event.ON_RESUME -> Log.d(TAG, "onResume: ")
-            Lifecycle.Event.ON_PAUSE -> Log.d(TAG, "onPause: ")
-            Lifecycle.Event.ON_STOP -> stopSession()
-            //Lifecycle.Event.ON_STOP -> Log.d(TAG, "onStop: ")
-            Lifecycle.Event.ON_DESTROY -> Log.d(TAG, "onDestroy: ")
+            Lifecycle.Event.ON_PAUSE -> Log.d(TAG, "ON_PAUSE: ")
+            Lifecycle.Event.ON_STOP -> {
+                Log.d(TAG, "ON_STOP: ")
+                stopSession()
+            }
+            Lifecycle.Event.ON_DESTROY -> Log.d(TAG, "ON_DESTROY: ")
             else -> {}
         }
     }
@@ -84,25 +90,28 @@ class PushDevonics(activity: Activity, appId: String) : LifecycleEventObserver {
         }
     }
 
-    fun getIntentData(intent: Intent?) {
+    private fun parseIntent(activity: Activity) {
+        val pushCache = PushCache()
+        val bundle = activity.intent.extras
 
-        if (null != intent) {
-            val bundle = intent.extras
-
-            val sentPushId = bundle?.getString("sent_push_id")
-            if (sentPushId != null) {
-                val pushData = PushData(sentPushId)
-                val pushCache = PushCache()
-                val registrationId = pushCache.getRegistrationIdFromPref()
-                /*if (registrationId != null) {
-                    service.createTransition(registrationId, pushData)
-                }*/
-                sendTransition()
-                Log.d(TAG, "getIntentData: sentPushId $sentPushId")
-            }
-        } else {
-            Log.i(TAG, "intent = null")
+        sent_push_id = bundle?.getString("sent_push_id")
+        sentPushId = helperCache.getSentPushId()
+        val transitionState = helperCache.getTransitionSt()
+        Log.d(TAG, "parse: sent_push_id $sent_push_id")
+        Log.d(TAG, "parse: sentPushId $sentPushId")
+        Log.d(TAG, "parse: openUrl $openUrl")
+        if (transitionState == true) {
+            return
         }
+        if (sent_push_id != null && transitionState != true) {
+            val pushData = PushData(sent_push_id!!)
+            val registrationId = pushCache.getRegistrationIdFromPref()
+            if (registrationId != null) {
+                service.createTransition(registrationId, pushData)
+                helperCache.saveTransition(true)
+            }
+        }
+        helperCache.saveSentPushId(null)
     }
 
     private fun sendTransition() {
@@ -121,7 +130,6 @@ class PushDevonics(activity: Activity, appId: String) : LifecycleEventObserver {
 
     private fun openUrl(context: Context) {
         val openUrl = helperCache.getOpenUrl()
-        //val sentPushId = helperCache.getSentPushId()
         Log.d(TAG, "openUrl = $openUrl")
         if (openUrl != null) {
             val urlIntent = Intent()
@@ -132,7 +140,6 @@ class PushDevonics(activity: Activity, appId: String) : LifecycleEventObserver {
             urlIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             try {
                 context.startActivity(urlIntent)
-                sendTransition()
             } catch (e: ActivityNotFoundException) {
                 Log.e(TAG, "ActivityNotFoundException $e")
             }
