@@ -42,12 +42,8 @@ class MyHmsMessageService : HmsMessageService() {
         if (msgData != null) {
             val sentPushId = msgData["sent_push_id"].toString()
             val deeplink = msgData["deeplink"].toString()
-            if (remoteMessage.notification.link != null) {
-                val openUrl = remoteMessage.notification.link.toString()
-                helperCache.saveOpenUrl(openUrl)
-                //Log.d(TAG, "onMessageReceived openUrl: $openUrl")
-            }
-
+            val openUrl = msgData["open_url"].toString()
+            helperCache.saveOpenUrl(openUrl)
             helperCache.saveSentPushId(sentPushId)
             helperCache.saveDeeplink(deeplink)
             helperCache.saveTransition(false)
@@ -66,8 +62,7 @@ class MyHmsMessageService : HmsMessageService() {
         // Send pushData to intent
         intent?.putExtra("sent_push_id", msgData["sent_push_id"]).toString()
         intent?.putExtra("deeplink", msgData["deeplink"]).toString()
-        val u = remoteMessage.notification.link
-        intent?.putExtra("open_url", u).toString()
+        intent?.putExtra("open_url", msgData["open_url"]).toString()
 
         val rnds = (1..1000).random()
 
@@ -94,8 +89,6 @@ class MyHmsMessageService : HmsMessageService() {
             val title = notification.title
             val text = notification.body
             //Log.d(TAG, "onMessageReceived: title $title")
-
-            val imageUrl = remoteMessage.notification?.imageUrl.toString()
 
             val notificationBuilder = NotificationCompat.Builder(this.applicationContext, channelId)
                 .setSmallIcon(resId)

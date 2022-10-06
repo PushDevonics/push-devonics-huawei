@@ -36,7 +36,7 @@ class HelperCache(context: Context) {
             .getString(OPEN_URL, null)
     }
 
-    fun saveDeeplink(deeplink: String) {
+    fun saveDeeplink(deeplink: String?) {
         ed?.putString(DEEPLINK, deeplink)
         ed?.apply()
     }

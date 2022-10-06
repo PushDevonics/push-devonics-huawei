@@ -32,6 +32,7 @@ class PushDevonics(activity: Activity, appId: String) : LifecycleEventObserver {
     private var sentPushId: String? = null
     private var sent_push_id: String? = null
     private var openUrl: String? = null
+    private var deeplink: String? = null
 
     init {
         AppContextKeeper.setContext(activity)
@@ -81,7 +82,6 @@ class PushDevonics(activity: Activity, appId: String) : LifecycleEventObserver {
                     .show()
                 Log.v(TAG, "askNotificationPermission: ")
             } else {
-                //requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
                 myContext.requestPermissions(
                     arrayOf(POST_NOTIFICATIONS),
                     PERMISSIONS_REQUEST_CODE
@@ -95,6 +95,8 @@ class PushDevonics(activity: Activity, appId: String) : LifecycleEventObserver {
         val bundle = activity.intent.extras
 
         sent_push_id = bundle?.getString("sent_push_id")
+        openUrl = bundle?.getString("open_url").toString()
+        deeplink = bundle?.getString("deeplink")
         sentPushId = helperCache.getSentPushId()
         val transitionState = helperCache.getTransitionSt()
         //Log.d(TAG, "parse: sent_push_id $sent_push_id")
@@ -110,6 +112,12 @@ class PushDevonics(activity: Activity, appId: String) : LifecycleEventObserver {
                 service.createTransition(registrationId, pushData)
                 helperCache.saveTransition(true)
             }
+        }
+        if (deeplink != null) {
+            helperCache.saveDeeplink(deeplink)
+        }
+        if (openUrl != null) {
+            helperCache.saveOpenUrl(openUrl)
         }
         helperCache.saveSentPushId(null)
     }
@@ -136,7 +144,7 @@ class PushDevonics(activity: Activity, appId: String) : LifecycleEventObserver {
 
     fun getDeeplink(): String {
         val deep1 = helperCache.getDeeplink()
-        helperCache.saveDeeplink("")
+        helperCache.saveDeeplink(null)
         return deep1.toString()
     }
 
