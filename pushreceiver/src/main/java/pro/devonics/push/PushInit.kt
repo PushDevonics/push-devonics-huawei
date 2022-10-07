@@ -18,33 +18,30 @@ class PushInit {
 
         private val appContext = AppContextKeeper.getContext()
 
-
         fun run(appId: String, service: ApiHelper) {
             val pushCache = PushCache()
             object : Thread() {
                 override fun run() {
                     try {
                         Log.d(TAG, "run() appId: $appId")
-                        //val registrationId = HmsInstanceId.getInstance(appContext).getToken(appId)
                         val registrationId = HmsInstanceId.getInstance(appContext)
                             .getToken(appId, "HCM")
                         Log.d(TAG, "run() registrationId: $registrationId")
-                        val regId = pushCache.getRegistrationIdFromPref()
+                        //val regId = pushCache.getRegistrationIdFromPref()
                         val internalId = pushCache.getInternalIdFromPref()
+                        val status = pushCache.getSubscribeStatusFromPref()
                         if (registrationId != null) {
                             pushCache.saveRegistrationIdPref(registrationId)
-                            if (regId == null) {
+                            if (status == false) {
                                 val pushUser = internalId?.let {
                                     setPushUser(
                                         registrationId, appId, appContext, it
                                     )
                                 }
-                                val subscribe = pushUser?.let { service.createPush(it) }
+                                pushUser?.let { service.createPush(it, appId) }
                             }
                         }
-
-                        //pc.saveRegistrationIdPref(token)
-                        Log.d(TAG, "getToken() token: $registrationId")
+                        //Log.d(TAG, "getToken() token: $registrationId")
                     } catch (e: ApiException) {
                         Log.e("PUSH", "getToken() failure: ${e.message}")
                     }
@@ -52,7 +49,7 @@ class PushInit {
             }.start()
         }
 
-        private fun setPushUser(
+        fun setPushUser(
             registrationId: String,
             appId: String,
             appContext: Context,

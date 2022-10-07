@@ -38,7 +38,7 @@ class PushDevonics(activity: Activity, appId: String) : LifecycleEventObserver {
         AppContextKeeper.setContext(activity)
         PushInit.run(appId, service)
         DataHelper.startTime()
-        startSession()
+        startSession(appId)
         createInternalId()
     }
     override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
@@ -163,12 +163,12 @@ class PushDevonics(activity: Activity, appId: String) : LifecycleEventObserver {
         return pushCache.getInternalIdFromPref()
     }
 
-    private fun startSession() {
+    private fun startSession(appId: String) {
         Log.d(TAG, "startSession: ")
         val pushCache = PushCache()
         val registrationId = pushCache.getRegistrationIdFromPref()
         if (pushCache.getSubscribeStatusFromPref() == true) {
-            val session = registrationId?.let { service.createSession(it) }
+            val session = registrationId?.let { service.createSession(it, appId) }
             //Log.d(TAG, "subscribeStatus = ${pushCache.getSubscribeStatusFromPref()}")
 
         }

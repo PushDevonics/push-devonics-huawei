@@ -37,8 +37,8 @@ class MyHmsMessageService : HmsMessageService() {
 
         val helperCache = HelperCache(this)
         val msgData = remoteMessage.dataOfMap
-        val msgBody = msgData["message_body"].toString()
-        Log.d(TAG, "onMessageReceived msgBody: $msgBody")
+        //val msgBody = msgData["message_body"].toString()
+        //Log.d(TAG, "onMessageReceived msgBody: $msgBody")
         if (msgData != null) {
             val sentPushId = msgData["sent_push_id"].toString()
             val deeplink = msgData["deeplink"].toString()
