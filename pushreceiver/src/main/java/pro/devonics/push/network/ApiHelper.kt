@@ -40,7 +40,7 @@ class ApiHelper(private val apiService: ApiService) {
                         pushCache.saveSubscribeStatus(true)
                         val registrationId = pushUser.getRegistrationId()
                         createSession(registrationId, appId)
-                        Log.d(TAG, "createPush.onResponse: isSuccessful")
+                        Log.d(TAG, "createPush: isSuccessful")
                     } else {
                         pushCache.saveSubscribeStatus(false)
                     }
@@ -74,9 +74,8 @@ class ApiHelper(private val apiService: ApiService) {
                                 }
                             }
                         }
-                        Log.d(TAG, "createSession.onResponse: isSuccessful")
+                        Log.d(TAG, "createSession: isSuccessful")
                     } else {
-                        //createSession(registrationId, appId)
                         val subscribe = pushCache.getSubscribeStatusFromPref()
                         val internalId = pushCache.getInternalIdFromPref()
 
@@ -88,11 +87,9 @@ class ApiHelper(private val apiService: ApiService) {
                                 internalId
                             )
                             createPush(pushUser, appId)
-
-                            Log.d(TAG, "createSession: pushUser $pushUser")
+                            //Log.d(TAG, "createSession: pushUser $pushUser")
                         }
                     }
-                    //Log.d(TAG, "createSession.onResponse: response = $response")
                 }
 
                 override fun onFailure(call: Call<Status>, t: Throwable) {
@@ -124,10 +121,8 @@ class ApiHelper(private val apiService: ApiService) {
     fun saveTag(key: String, value: String, registrationId: String): Status? {
 
         val tag = Tag(key, value)
-
         val call = apiService.saveCustomParams(registrationId, tag)
-
-        Log.d(TAG, "saveCustomTag: tag = $tag")
+        //Log.d(TAG, "saveCustomTag: tag = $tag")
 
         call.enqueue(
            object : Callback<Status> {

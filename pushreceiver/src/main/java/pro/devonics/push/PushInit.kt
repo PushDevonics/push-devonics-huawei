@@ -23,7 +23,7 @@ class PushInit {
             object : Thread() {
                 override fun run() {
                     try {
-                        Log.d(TAG, "run() appId: $appId")
+                        //Log.d(TAG, "run() appId: $appId")
                         val registrationId = HmsInstanceId.getInstance(appContext)
                             .getToken(appId, "HCM")
                         Log.d(TAG, "run() registrationId: $registrationId")
