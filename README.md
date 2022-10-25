@@ -62,11 +62,10 @@ Add it to you build.gradle(app):
     id 'com.huawei.agconnect'
     }
     
-or
+    or
     
     apply plugin: 'com.huawei.agconnect'
    
-
     android {
         signingConfigs {
             config {
