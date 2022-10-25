@@ -60,7 +60,7 @@ Add it to you build.gradle(app):
 
     plugins {
     id 'com.huawei.agconnect'
-}
+    }
 
     android {
         signingConfigs {
@@ -73,7 +73,7 @@ Add it to you build.gradle(app):
                 v1SigningEnabled true
                 v2SigningEnabled true
             }
-    `   }
+    }
     buildTypes {
         debug {
             signingConfig signingConfigs.config
