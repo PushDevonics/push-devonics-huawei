@@ -27,12 +27,12 @@ Add it to you build.gradle(project):
             mavenCentral()
             maven { url 'https://jitpack.io' }
             maven { url 'https://developer.huawei.com/repo/' }
-}
+        }
+    }
 
     dependencies {
         classpath 'com.huawei.agconnect:agcp:1.6.0.300'
     }
-}
 
 
 Add it to you settings.gradle in repositories:
@@ -61,6 +61,11 @@ Add it to you build.gradle(app):
     plugins {
     id 'com.huawei.agconnect'
     }
+    
+or
+    
+    apply plugin: 'com.huawei.agconnect'
+   
 
     android {
         signingConfigs {
@@ -73,15 +78,17 @@ Add it to you build.gradle(app):
                 v1SigningEnabled true
                 v2SigningEnabled true
             }
-    }
-    buildTypes {
-        debug {
-            signingConfig signingConfigs.config
         }
-        release {
-            signingConfig signingConfigs.config
+        buildTypes {
+            debug {
+                signingConfig signingConfigs.config
+            }
+            release {
+                signingConfig signingConfigs.config
+            }
         }
     }
+    
     dependencies {
         implementation 'com.github.PushDevonics:push-devonics-huawei:latest-version'
     }
